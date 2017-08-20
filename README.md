@@ -1,4 +1,4 @@
-# terraform-module-gcp-sql
+# Google Cloud Plateform - Cloud SQL
 
 ## Example
 
