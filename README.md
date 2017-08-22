@@ -34,7 +34,7 @@ module "sql" {
 | disk_size | Storage size in GB | string | `50` | no |
 | disk_type | Storage Type (SSD ..) | string | `PD_SSD` | no |
 | hostname | Hostname for accessing the database | string | `%` | no |
-| instance_size | size of instance (ex: db-n1-standard-2) | string | `db-n1-standard-2` | no |
+| instance_size | size of instance (ex: db-f1-micro) | string | `db-f1-micro` | no |
 | maintenance_window_day | Day of maintenance (integer) | string | `7` | no |
 | maintenance_window_hour | Hour of maintenance (integer) | string | `4` | no |
 | name | Name of the SQL instance | string | - | yes |
