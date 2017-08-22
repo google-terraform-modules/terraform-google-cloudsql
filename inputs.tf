@@ -22,8 +22,8 @@ variable "database_version" {
 
 variable "instance_size" {
     type = "string"
-    default = "db-n1-standard-2"
-    description = "size of instance (ex: db-n1-standard-2)"
+    default = "db-f1-micro"
+    description = "size of instance (ex: db-f1-micro)"
 }
 
 variable "disk_type" {
@@ -34,6 +34,7 @@ variable "disk_type" {
 
 variable "disk_size" {
     type = "string"
+    default = 50
     description = "Storage size in GB"
 }
 
@@ -72,12 +73,13 @@ variable "backup_binary_log_enabled" {
 
 variable "backup_enabled" {
     type = "string"
-    default = false
+    default = true
     description = "Backup activation"
 }
 
 variable "backup_start_time" {
     type = "string"
+    default = "02:30"
     description = "Start time of the daily backup"
 }
 
