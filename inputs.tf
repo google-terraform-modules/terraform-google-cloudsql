@@ -43,6 +43,12 @@ variable "disk_autoresize" {
     description = "Auto-resize of the disk if the starting size is exceeded"
 }
 
+variable "cidr_ip_access" {
+    type = "string"
+    default = "0.0.0.0/0"
+    description = "A CIDR notation IPv4 or IPv6 address that is allowed to access this instance"
+}
+
 variable "maintenance_window_day" {
     type = "string"
     description = "Day of maintenance (integer)"
@@ -68,4 +74,24 @@ variable "backup_enabled" {
 variable "backup_start_time" {
     type = "string"
     description = "Start time of the daily backup"
+}
+
+
+// mysql user
+
+variable "hostname" {
+    type = "string"
+    default = "%"
+    description = "Hostname for accessing the database"
+}
+
+variable "username" {
+    type = "string"
+    default = "admin"
+    description = "Username of the host to access the database"
+}
+
+variable "password" {
+    type = "string"
+    description = "Password of the host to access the database"
 }
