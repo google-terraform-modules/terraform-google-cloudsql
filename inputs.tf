@@ -16,7 +16,7 @@ variable "zone" {
 
 variable "database_version" {
     type = "string"
-    default = "MYSQL_5_6"
+    default = "MYSQL_5_7"
     description = "Version of the database (MYSQL_5_6, MYSQL_5_7, POSTGRES_9_6)"
 }
 
@@ -49,13 +49,18 @@ variable "cidr_ip_access" {
     description = "A CIDR notation IPv4 or IPv6 address that is allowed to access this instance"
 }
 
+
+// MySQL - backup & maintenance
+
 variable "maintenance_window_day" {
     type = "string"
+    default = 7
     description = "Day of maintenance (integer)"
 }
 
 variable "maintenance_window_hour" {
     type = "string"
+    default = 4
     description = "Hour of maintenance (integer)"
 }
 
@@ -77,7 +82,7 @@ variable "backup_start_time" {
 }
 
 
-// mysql user
+// MySQL User
 
 variable "hostname" {
     type = "string"
