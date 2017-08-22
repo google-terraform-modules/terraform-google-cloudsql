@@ -29,14 +29,14 @@ module "sql" {
 | backup_enabled | Backup activation | string | `false` | no |
 | backup_start_time | Start time of the daily backup | string | - | yes |
 | cidr_ip_access | A CIDR notation IPv4 or IPv6 address that is allowed to access this instance | string | `0.0.0.0/0` | no |
-| database_version | Version of the database (MYSQL_5_6, MYSQL_5_7, POSTGRES_9_6) | string | `MYSQL_5_6` | no |
+| database_version | Version of the database (MYSQL_5_6, MYSQL_5_7, POSTGRES_9_6) | string | `MYSQL_5_7` | no |
 | disk_autoresize | Auto-resize of the disk if the starting size is exceeded | string | `true` | no |
 | disk_size | Storage size in GB | string | - | yes |
 | disk_type | Storage Type (SSD ..) | string | `PD_SSD` | no |
 | hostname | Hostname for accessing the database | string | `%` | no |
 | instance_size | size of instance (ex: db-n1-standard-2) | string | `db-n1-standard-2` | no |
-| maintenance_window_day | Day of maintenance (integer) | string | - | yes |
-| maintenance_window_hour | Hour of maintenance (integer) | string | - | yes |
+| maintenance_window_day | Day of maintenance (integer) | string | `7` | no |
+| maintenance_window_hour | Hour of maintenance (integer) | string | `4` | no |
 | name | Name of the SQL instance | string | - | yes |
 | password | Password of the host to access the database | string | - | yes |
 | region | Region of the Instance | string | `europe-west1` | no |
