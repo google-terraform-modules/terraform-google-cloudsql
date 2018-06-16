@@ -1,23 +1,41 @@
 # Google Cloud Plateform - Cloud SQL
 
-## Example
+## Examples
 
+* Standalone MySQL Instance (Zonal)
 ```
-module "sql" {
-  source = "./sql"
-  name = "${var.name}"
-  region = "${var.region}"
-  zone = "${var.zone}"
-  database_version = "${var.database_version}"
-  instance_size = "${var.instance_size}"
-  disk_type = "${var.disk_type}"
-  disk_size = "${var.disk_size}"
-  disk_autoresize = "${var.disk_autoresize}"
-  maintenance_window_day = "${var.maintenance_window_day}"
-  maintenance_window_hour = "${var.maintenance_window_hour}"
-  backup_binary_log_enabled = "${var.backup_binary_log_enabled}"
-  backup_enabled = "${var.backup_enabled}"
-  backup_start_time = "${var.backup_start_time}"
+module "cloudsql-mysql" {
+  source = "git::ssh://git@github.com:google-terraform-modules/terraform-google-cloudsql.git"
+
+  general = {
+    name       = "mydatabase"
+    env        = "dev"
+    region     = "europe-west1"
+    db_version = "MYSQL_5_6"
+  }
+
+  instance = {
+    zone = "b"
+  }
+}
+```
+
+* PostgreSQL Instance HA Cluster (Regional)
+```
+module "cloudsql-postgres-ha" {
+  source = "git::ssh://git@github.com:google-terraform-modules/terraform-google-cloudsql.git"
+
+  general = {
+    name       = "mydatabase"
+    env        = "dev"
+    region     = "europe-west1"
+    db_version = "POSTGRES_9_6"
+  }
+
+  instance = {
+    zone              = "b"
+    availability_type = "REGIONAL"
+  }
 }
 ```
 
@@ -25,28 +43,20 @@ module "sql" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| backup_binary_log_enabled | Activating logs for backup | string | `false` | no |
-| backup_enabled | Backup activation | string | `true` | no |
-| backup_start_time | Start time of the daily backup | string | `02:30` | no |
-| cidr_ip_access | A CIDR notation IPv4 or IPv6 address that is allowed to access this instance | string | `0.0.0.0/0` | no |
-| database_version | Version of the database (MYSQL_5_6, MYSQL_5_7, POSTGRES_9_6) | string | `MYSQL_5_7` | no |
-| disk_autoresize | Auto-resize of the disk if the starting size is exceeded | string | `true` | no |
-| disk_size | Storage size in GB | string | `50` | no |
-| disk_type | Storage Type (SSD ..) | string | `PD_SSD` | no |
-| hostname | Hostname for accessing the database | string | `%` | no |
-| instance_size | size of instance (ex: db-f1-micro) | string | `db-f1-micro` | no |
-| maintenance_window_day | Day of maintenance (integer) | string | `7` | no |
-| maintenance_window_hour | Hour of maintenance (integer) | string | `4` | no |
-| name | Name of the SQL instance | string | - | yes |
-| password | Password of the host to access the database | string | - | yes |
-| region | Region of the Instance | string | `europe-west1` | no |
-| username | Username of the host to access the database | string | `admin` | no |
-| zone | Area of the instance (a, b, c, d, e) | string | - | yes |
+| authorized_gae_applications | A list of Google App Engine (GAE) project names that are allowed to access this instance | list | `<list>` | no |
+| general | General configuration | map | - | yes |
+| instance | Instance configuration | map | - | yes |
+| labels | Global labels | map | `<map>` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | instance_sql_ipv4 | The IPv4 address assigned |
-| instance_sql_setting_version | Used to make sure changes to the settings block are atomic |
+| instance_sql_ipv4_time_to_retire | The time this IP address will be retired, in RFC 3339 format |
+| server_ca_cert | The CA Certificate used to connect to the SQL Instance via SSL |
+| server_ca_cert_common_name | The CN valid for the CA Cert |
+| server_ca_cert_create_time | Creation time of the CA Cert |
+| server_ca_cert_expiration_time | Expiration time of the CA Cert |
+| server_ca_cert_sha1_fingerprint | SHA Fingerprint of the CA Cert |
 | users_self_link | The URL of the created resource |
