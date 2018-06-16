@@ -1,42 +1,43 @@
-resource "google_sql_database_instance" "new_instance_sql" {
-  name = "${var.name}"
+locals {
+  name_prefix = "${var.general["name"]}-${var.general["region"]}"
+}
 
-  region = "${var.region}"
-  database_version = "${var.database_version}"
+# Instance CloudSQL
+# https://www.terraform.io/docs/providers/google/r/sql_database_instance.html
+resource "google_sql_database_instance" "new_instance_sql" {
+  name             = "${local.name_prefix}"
+  region           = "${var.general["region"]}"
+  database_version = "${lookup(var.general, "db_version", "MYSQL_5_7")}"
 
   settings {
-    tier = "${var.instance_size}"
-    disk_type       = "${var.disk_type}"
-    disk_size       = "${var.disk_size}"
-    disk_autoresize = "${var.disk_autoresize}"
+    tier                        = "${lookup(var.instance, "tier", "db-f1-micro")}"
+    disk_type                   = "${lookup(var.instance, "disk_type", "PD_SSD")}"
+    disk_size                   = "${lookup(var.instance, "disk_size", 10)}"
+    disk_autoresize             = "${lookup(var.instance, "disk_auto", true)}"
+    activation_policy           = "${lookup(var.instance, "activation_policy", "ALWAYS")}"
+    availability_type           = "${lookup(var.instance, "availability_type", "ZONAL")}"
+    authorized_gae_applications = "${var.authorized_gae_applications}"
+    user_labels                 = "${var.labels}"
 
     ip_configuration {
-      authorized_networks = {
-        name = "First access"
-        value = "${var.cidr_ip_access}"
-      }
+      require_ssl  = "${lookup(var.instance, "require_ssl", false)}"
+      ipv4_enabled = "${lookup(var.instance, "ipv4_enabled", true)}"
     }
 
     location_preference {
-      zone = "${var.region}-${var.zone}"
+      zone = "${var.general["region"]}-${var.instance["zone"]}"
     }
 
     backup_configuration {
-      binary_log_enabled = "${var.backup_binary_log_enabled}"
-      enabled            = "${var.backup_enabled}"
-      start_time         = "${var.backup_start_time}"
+      binary_log_enabled = false
+      enabled            = "${lookup(var.general, "backup_enabled", true)}"
+      start_time         = "${lookup(var.general, "backup_time", "02:30")}" # every 2:30AM
     }
 
     maintenance_window {
-      day = "${var.maintenance_window_day}"
-      hour = "${var.maintenance_window_hour}"
+      day          = "${lookup(var.instance, "maintenance_day", 1)}"          # Monday
+      hour         = "${lookup(var.instance, "maintenance_hour", 2)}"         # 2AM
+      update_track = "${lookup(var.instance, "maintenance_track", "stable")}"
     }
   }
-}
-
-resource "google_sql_user" "new_instance_sql_users" {
-  instance  = "${google_sql_database_instance.new_instance_sql.name}"
-  host     = "${var.hostname}"
-  name      = "${var.username}"
-  password = "${var.password}"
 }
